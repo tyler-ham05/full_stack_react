@@ -1,5 +1,5 @@
 const express = require('express')
-const dayjs = require("dayjs")
+//const dayjs = require("dayjs")
 const morgan = require("morgan")
 const cors = require("cors")
 const app = express()
@@ -40,8 +40,9 @@ people = [
 ] 
 
 app.get("/info", (request, response) => {
-    response.send(`<div><p>Phonebook has info for ${people.length} people </p><p> ${dayjs().format("dddd, MMMM D, YYYY, h:mm A")}</p></div>`)
+    response.send(`<div><p>Phonebook has info for ${people.length} people </p><p> </p></div>`)
 })
+//${dayjs().format("dddd, MMMM D, YYYY, h:mm A")} does not work with server deployment
 
 app.get("/api/persons", (request, response) => {
     response.json(people)
