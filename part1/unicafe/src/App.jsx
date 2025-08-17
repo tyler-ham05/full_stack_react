@@ -60,7 +60,6 @@ const App = () => {
       <Button text ="bad" func = {addBad}/>
       <Statistics good = {good} neutral = {neutral} bad={bad}  average={average()} all = {all()} positive = {positive()}/>
     </div>
-    
   )
 }
 
