@@ -4,7 +4,7 @@ import PersonForm from './components/personform.jsx'
 import Display from './components/display.jsx'
 import axios from 'axios'
 
-const baseUrl = '/api/notes'
+const baseUrl = '/api/persons'
 
 
 const Notification = ({ message, flag }) => {
