@@ -3,6 +3,10 @@ const express = require('express')
 const morgan = require("morgan")
 const cors = require("cors")
 const app = express()
+const Person = require('./modules/person')
+
+require('dotenv').config()
+
 
 const middleware = morgan.token('body', (req) => {
     return req.method === 'POST' ? JSON.stringify(req.body) : ''
@@ -16,48 +20,22 @@ app.use(cors())
 console.log("hello world")
 
 
-
-people = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-] 
-
 app.get("/info", (request, response) => {
     response.send(`<div><p>Phonebook has info for ${people.length} people </p><p> </p></div>`)
 })
 //${dayjs().format("dddd, MMMM D, YYYY, h:mm A")} does not work with server deployment
 
 app.get("/api/persons", (request, response) => {
-    response.json(people)
+    Person.find({}).then(people => {
+        response.json(people)
+    })
+    
 })
 
 app.get("/api/persons/:id", (request, response) => {
-    const id = request.params.id
-    const person = people.find(person => person.id === id)
-    if (person){
+    Person.findById(request.params.id).then(person => {
         response.json(person)
-    }
-    else {
-        response.status(404).end()
-    }
+    })
 })
 
 app.delete("/api/persons/:id", (request, response) => {
@@ -67,24 +45,24 @@ app.delete("/api/persons/:id", (request, response) => {
 })
 
 app.post("/api/persons", (request, response) => {
-    const id = Math.floor(Math.random() * 100000000)
-    const person = request.body
+    const body = request.body
+    if (!body.name){
+        return response.status(400).json({error: 'name missing'})
+    }
+    const person = new Person({
+        name: body.name,
+        number: body.number
+    })
 
-    if(person.name && person.number && !people.find(entry => entry.name === person.name)){
-        person.id = String(id)
-        people = people.concat(person)
-        response.json(person)
-    }
-    else{
-        response.status(400).json({
-            error: 'name must exist and be unique'
+    person
+        .save()
+        .then(newPerson => {
+            response.json(newPerson)
         })
-    }
-    
-   
 })
 
-const PORT = process.env.PORT || 3001
+
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
