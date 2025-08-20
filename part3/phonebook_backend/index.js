@@ -61,17 +61,29 @@ app.post("/api/persons", (request, response) => {
     if (!body.name){
         return response.status(400).json({error: 'name missing'})
     }
-    const person = new Person({
-        name: body.name,
-        number: body.number
+    if (Person.find({name:body.name})){
+        filter = {name:body.name}
+        update = {number:body.number}
+        Person
+            .updateOne(filter, update)
+            .then(updatePerson => {
+                response.json(updatePerson)
+            })
+    }
+    else{
+        const person = new Person({
+            name: body.name,
+            number: body.number
+        })
+
+        person
+            .save()
+            .then(newPerson => {
+                response.json(newPerson)
+            })
+        }
     })
 
-    person
-        .save()
-        .then(newPerson => {
-            response.json(newPerson)
-        })
-})
 
 
 const PORT = process.env.PORT
