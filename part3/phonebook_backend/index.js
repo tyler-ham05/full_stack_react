@@ -33,7 +33,8 @@ console.log("hello world")
 
 
 app.get("/info", (request, response) => {
-    response.send(`<div><p>Phonebook has info for ${people.length} people </p><p> </p></div>`)
+    Person.find({}).then(people => {response.send(`<div><p>Phonebook has info for ${people.length} people </p><p> </p></div>`)})
+    
 })
 //${dayjs().format("dddd, MMMM D, YYYY, h:mm A")} does not work with server deployment
 
