@@ -1,7 +1,7 @@
 const express = require('express')
 //const dayjs = require("dayjs")
-const morgan = require("morgan")
-const cors = require("cors")
+const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 const Person = require('./modules/person')
 
@@ -31,10 +31,10 @@ app.use(morgan(':method :url :status :res[content-length] :response-time ms :bod
 app.use(express.static('dist'))
 app.use(cors())
 
-console.log("hello world")
+console.log('hello world')
 
 
-app.get("/info", (request, response, next) => {
+app.get('/info', (request, response, next) => {
   Person.find({})
     .then(people => {
       response.send(`<div><p>Phonebook has info for ${people.length} people </p><p> </p></div>`)
@@ -43,7 +43,7 @@ app.get("/info", (request, response, next) => {
 })
 //${dayjs().format("dddd, MMMM D, YYYY, h:mm A")} does not work with server deployment
 
-app.get("/api/persons", (request, response, next) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({})
     .then(people => {
       response.json(people)
@@ -51,7 +51,7 @@ app.get("/api/persons", (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.get("/api/persons/:id", (request, response, next) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       if (!person) {
@@ -62,13 +62,13 @@ app.get("/api/persons/:id", (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.delete("/api/persons/:id", (request, response, next) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(() => { response.status(204).end() })
     .catch(error => next(error))
 })
 
-app.post("/api/persons", (request, response, next) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
   if (!body.name) {
     return response.status(400).json({ error: 'name missing' })
@@ -87,7 +87,7 @@ app.post("/api/persons", (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.put("/api/persons/:id", (request, response, next) => {
+app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findById(request.params.id)
