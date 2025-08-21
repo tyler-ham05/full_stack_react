@@ -77,7 +77,7 @@ app.post("/api/persons", (request, response) => {
                 response.json(newPerson)
             })
             .catch(error =>
-                console.log(error.response.data.error)
+                next(error)
             )
         }
     })
