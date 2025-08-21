@@ -20,8 +20,20 @@ mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
 const phoneBookEntry = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: {
+    type:String,
+    validate: {
+      validator: function(v){
+        return /^\d+(?:-\d+)*$/.test(v)}
+      
+    }
+
+  }
 })
 
 phoneBookEntry.set('toJSON', {

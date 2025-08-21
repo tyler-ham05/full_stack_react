@@ -7,10 +7,11 @@ const Person = require('./modules/person')
 
 require('dotenv').config()
 
-
+/*
 const middleware = morgan.token('body', (req) => {
     return req.method === 'POST' ? JSON.stringify(req.body) : ''
 })
+*/
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
@@ -72,6 +73,9 @@ app.post("/api/persons", (request, response) => {
             .save()
             .then(newPerson => {
                 response.json(newPerson)
+            })
+            .catch(error => {
+                console.log(error.response.data.error)
             })
         }
     })
